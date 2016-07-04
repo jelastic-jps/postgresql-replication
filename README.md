@@ -1,42 +1,42 @@
-# Jelastic PostgreSQL Database Replication Installation Package 
+[![PostgreSQL Database Replication](images/postgres9_logo.png)](../../../postgresql-replication)
+## PostgreSQL Database Replication
 
-This repository provides [PostgreSQL Database Replication](http://docs.jelastic.com/postgresql-database-replication/) JPS-based installation package for Jelastic Platform.
+The JPS package deploys PostgreSQL Cluster with preconfigured replication that initially contains 2 database containers. The package provides the solution for solving performance problems, DB backups support, gives ability to alleviate system failures. It enables data from one database server (the master) to be replicated to another standby (the slave).
 
+### Highlights
+This package is designed to solve a number of different problems with performance, supporting the backup of different databases, and as a part of a larger solution to alleviate system failures.<br />
 
-**PostgreSQL Database Replication** is used to solve performance problems, to support the db backups, and to alleviate system failures. It enables data from one database server (master) to be replicated to another (slave).
-
-**Engine**: java7
-
-**Environment topology**:
-
-1. 
-   - node type: postgres9
-   - count: 2
-   - cloudlets: 16
-
-
-### What it can be used for? (i.e. usecases + description of options to define if are any)
 Get advantages of PostgreSQL database clustering and high availability by setting up the hot standby (or streaming) replication, i.e. asynchronous binary replication to one or more standbys, queried as a read-only databases.<br />
 Using WAL (Write-Ahead Logging) data is the fastest available way of replication with a great performance, so-called asynchronous replication. In this case the master database server works in archiving mode just writing the data to the storage.<br />
-While the standby database cluster operates in recovery mode, reading the master's WAL files. These files are transferred to the standby DB promptly after writing is completed. In such a way, if master server totally fails, the WAL content streams to the standby cluster with just a few seconds delay.
+While the standby database cluster operates in recovery mode, reading the master's WAL files. These files are transferred to the standby DB promptly after writing is completed. In such a way, if master server totally fails, the WAL content streams to the standby cluster with just a few seconds delay.<br />
 
+The target usage for replication in PostgreSQL databases includes:
+  -  Data security
+  -  Analytics
+  -  Long-distance data distribution
 
-### What Jelastic JPS package is?
+###Environment Topology
 
-Jelastic JPS package represents an one-click installation solution, that allows to get the desired project hosted at Jelastic Cloud in a matter of minutes. Being based on [Jelastic Packaging Standard](https://docs.jelastic.com/jps), it automates creation of the necessary environment and subsequent application deployment to it. Herewith, all of the required properties and behaviors are predefined within the package JSON manifest, so you instantly get the ready-to-go solution.
-The full list of the available at a platform one-click packages can be seen at the corresponding same-named section of [Jelastic Marketplace](https://docs.jelastic.com/marketplace#apps].
+![MySQL Database Replication Topology](https://docs.google.com/drawings/d/1B4N1oR9ft5YrP6jPVApzHCYsTOD-u_3X1CAQD-b6rJk/pub?w=557&h=275)
 
-### How to deploy a package?
-###### For Developers
+### Specifics
 
-In case you can’t find the desired solution within the list of available ones at your dashboard, just copy and save the content of its manifest as a *.json* file and [import](https://docs.jelastic.com/environment-export-import#import) it to the dashboard. Herewith, you can apply any necessary adjustments to template settings through this file (if such are required) and install its customized version in the similar way.
+Layer              |     Server    | Number of CTs <br/> by default | Cloudlets per CT <br/> (reserved/dynamic) | Options
+----------------- | --------------| :-----------------------------------------: | :-------------------------------------------------------: | :-----:
+DB                  |    PostgreSQL    |       2                                             |           1 / 16                                                       | -
 
-###### For Cluster Admins
+* DB - Database 
+* CT - Container
 
-In order to add the desired JPS package to your platform and make it available for users, perform the following:
-- copy content of its manifest 
-- switch to the [Marketplace](http://ops-docs.jelastic.com/marketplace-46) section of your JCA panel and choose **Add > New Installation** menu option
-- paste the copied strings into the appeared frame and **Save** the template
-- choose your newly added package within the list and click on **Publish** above
+**PostgreSQL Database**: 9.5.2<br/>
+**Java Engine**: Java 7.0
 
-Also, you are able to adjust the given package template according to your needs and provide its customized version.
+### Deployment
+
+In order to get this solution instantly deployed, click the "Get It Hosted Now" button, specify your email address within the widget, choose one of the [Jelastic Public Cloud providers](https://jelastic.cloud) and press Install.
+
+[![GET IT HOSTED](https://raw.githubusercontent.com/jelastic-jps/jpswiki/master/images/getithosted.png)](https://jelastic.com/install-application/?manifest=https%3A%2F%2Fgithub.com%2Fjelastic-jps%2Fpostgresql-replication%2Fraw%2Fmaster%2Fmanifest.jps)
+
+To deploy this package to Jelastic Private Cloud, import [this JPS manifest](../../raw/master/manifest.jps) within your dashboard ([detailed instruction](https://docs.jelastic.com/environment-export-import#import)).
+
+More information about Jelastic JPS package and about installation widget for your website can be found in the [Jelastic JPS Application Package](https://github.com/jelastic-jps/jpswiki/wiki/Jelastic-JPS-Application-Package) reference.
