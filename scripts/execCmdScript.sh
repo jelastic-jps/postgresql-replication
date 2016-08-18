@@ -29,7 +29,7 @@ fi
 #На слейве
 if [ "${1}" == "slave2" ]; then
 sed -i "s|.*hot_standby.*|hot_standby = on|g" ${PGSQL_DATA}postgresql.conf
-cp -r /usr/pgsql-9.4/share/recovery.conf.sample ${PGSQL_DATA}recovery.conf
+cp -r /usr/pgsql-9.5/share/recovery.conf.sample ${PGSQL_DATA}recovery.conf
 sed -i "s|.*standby_mode.*|standby_mode = on|g" ${PGSQL_DATA}recovery.conf
 sed -i "s|.*primary_conninfo.*|primary_conninfo = 'host=${4} port=5432'|g" ${PGSQL_DATA}recovery.conf
 sed -i "s|.*max_wal_senders.*|#max_wal_senders.*|g" ${PGSQL_DATA}postgresql.conf
