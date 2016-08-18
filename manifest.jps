@@ -5,7 +5,7 @@
 		"categories": ["apps/clustered-dbs", "apps/clusters"],
 		"type": "php",
 		"homepage": "http://docs.jelastic.com/postgresql-database-replication",
-		"logo": "https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/images/postgres9_logo.png",
+		"logo": "https://raw.githubusercontent.com/bubbl/postgresql-replication/master/images/postgres9_logo.png",
 		"description": {
 			"text": "Master-slave replication is used to solve performance problems, to support the db backups, and to alleviate system failures. It enables data from one database server (master) to be replicated to another (slave)"
 		},
@@ -18,7 +18,7 @@
 			"topology": {
 				"engine": "java7",
 				"nodes": [{
-						"cloudlets": 16,
+						"cloudlets": 24,
 						"count": 2,
 						"nodeType": "postgres9"
 					}
@@ -27,123 +27,16 @@
 		},
 		"onInstall": {
 			"call": [
-					"installRsync",
-					"ConfiguringReplication"
+					"ConfigReplication"
 			]
 		},
 		"procedures": [{
-				"id": "installRsync",
-				"onCall": [{
-						"executeScript": {
-							"description": "Get compute nodes Ids and mirrors compute node's address for rsync",
-							"type": "javascript",
-							"script": "https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/scripts/installRsyncDaemon.js"
-						}
-					}
-				]
-			}, {
-				"id": "installLsync",
-				"onCall": [{
-						"executeShellCommands": [{
-								"nodeId": "${this.nodeId}",
-								"commands": [
-										"mkdir /var/lib/pgsql/data/lsyncd",
-										"curl -fsSL \"https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/libs/sync.tar\" -o /var/lib/pgsql/data/lsyncd/sync.tar",
-										"tar -xf /var/lib/pgsql/data/lsyncd/sync.tar -C /var/lib/pgsql/data/lsyncd/"
-								]
-							}
-						]
-					}, {
-						"replaceInFile": [{
-								"nodeId": "${this.nodeId}",
-								"path": "/var/lib/pgsql/data/lsyncd/etc/lsyncd.conf",
-								"replacements": [{
-										"pattern": "_MIRROR_SERVER_IP",
-										"replacement": "${this.mirrorServerIp}"
-									}, {
-										"pattern": "_USER",
-										"replacement": "admin"
-									}, {
-										"pattern": "{SERVER_WEBROOT}",
-										"replacement": "/var/lib/pgsql/data"
-									}, {
-										"pattern": "_INSTALL_DIRECTORY",
-										"replacement": "/var/lib/pgsql/data/lsyncd"
-									}, {
-										"pattern": "name",
-										"replacement": "varwwwwebroot"
-									}
-								]
-							}, {
-								"nodeId": "${this.nodeId}",
-								"path": "/var/lib/pgsql/data/lsyncd/etc/rsync.conf",
-								"replacements": [{
-										"pattern": "_NAME",
-										"replacement": "varwwwwebroot"
-									}, {
-										"pattern": "_USER",
-										"replacement": "admin"
-									}, {
-										"pattern": "_INSTALL_DIRECTORY",
-										"replacement": "/var/lib/pgsql/data/lsyncd"
-									}, {
-										"pattern": "{SERVER_WEBROOT}",
-										"replacement": "/var/lib/pgsql/data"
-									}
-								]
-							}, {
-								"nodeId": "${this.nodeId}",
-								"path": "/var/lib/pgsql/data/lsyncd/etc/rsyncd.pass",
-								"replacements": [{
-										"pattern": "_PASSWORD",
-										"replacement": "${user.appPassword}"
-									}
-								]
-							}, {
-								"nodeId": "${this.nodeId}",
-								"path": "/var/lib/pgsql/data/lsyncd/etc/rsyncd.secrets",
-								"replacements": [{
-										"pattern": "_PASSWORD",
-										"replacement": "${user.appPassword}"
-									}, {
-										"pattern": "_USER",
-										"replacement": "admin"
-									}
-								]
-							}, {
-								"nodeId": "${this.nodeId}",
-								"path": "/var/lib/pgsql/data/lsyncd/init.sh",
-								"replacements": [{
-										"pattern": "_INSTALL_DIRECTORY",
-										"replacement": "/var/lib/pgsql/data/lsyncd/"
-									}
-								]
-
-							}
-						]
-					}, {
-						"executeShellCommands": [{
-								"nodeId": "${this.nodeId}",
-								"commands": [
-										"cd /var/lib/pgsql/data/lsyncd/",
-										"chmod 600 etc/rsyncd.pass",
-										"chmod 600 etc/rsyncd.secrets",
-										"chmod 755 usr/bin/lsyncd",
-										"killall -9 lsyncd 2>/dev/null 1>/dev/null",
-										"killall -9 rsync 2>/dev/null 1>/dev/null",
-										"/usr/bin/rsync --daemon --config=/var/lib/pgsql/data/lsyncd/etc/rsync.conf --port=7755 &>>/var/lib/pgsql/data/lsyncd/var/log/rsyncd_start.log"
-								]
-							}
-						]
-					}
-				]
-			}, {
-				"id": "ConfiguringReplication",
+				"id": "ConfigReplication",
 				"onCall": [{
 						"executeShellCommands": [{
 								"nodeMission": "sqldb",
 								"commands": [
-										"wget \"https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/scripts/execCmdScript.sh\" -O /var/lib/pgsql/script.sh 2>&1"
+										"wget \"https://raw.githubusercontent.com/bubbl/postgresql-replication/master/scripts/execCmdScript.sh\" -O /var/lib/pgsql/script.sh 2>&1"
 								]
 							}, {
 								"nodeId": "${nodes.sqldb[0].id}",
@@ -155,27 +48,11 @@
 								"commands": [
 										"bash -x /var/lib/pgsql/script.sh slave ${nodes.sqldb[1].address} ${nodes.sqldb.password} ${nodes.sqldb[0].address} 1>> /var/lib/pgsql/log.log 2>>/var/lib/pgsql/log.log"
 								]
-							}, {
-								"nodeId": "${nodes.sqldb[0].id}",
-								"commands": [
-										"bash -x /var/lib/pgsql/script.sh master2 ${nodes.sqldb[1].address} ${nodes.sqldb.password} ${nodes.sqldb[0].address} 1>> /var/lib/pgsql/log.log 2>>/var/lib/pgsql/log.log"
-								]
-							}, {
-								"nodeId": "${nodes.sqldb[1].id}",
-								"commands": [
-										"bash -x /var/lib/pgsql/script.sh slave2 ${nodes.sqldb[1].address} ${nodes.sqldb.password} ${nodes.sqldb[0].address} 1>> /var/lib/pgsql/log.log 2>>/var/lib/pgsql/log.log"
-								]
-							}, {
-								"nodeId": "${nodes.sqldb[1].id}",
-								"commands": [
-										"sed -i \"s|.*wal_level.*|wal_level = hot_standby|g\" /var/lib/pgsql/data/postgresql.conf"
-								]
 							}
 						]
 					}
 				]
 			}
 		]
-	},
-	"jpsVersion": "0.5"
+	}
 }

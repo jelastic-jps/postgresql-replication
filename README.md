@@ -23,13 +23,12 @@ The target usage for replication in PostgreSQL databases includes:
 
 Layer              |     Server    | Number of CTs <br/> by default | Cloudlets per CT <br/> (reserved/dynamic) | Options
 ----------------- | --------------| :-----------------------------------------: | :-------------------------------------------------------: | :-----:
-DB                  |    PostgreSQL    |       2                                             |           1 / 16                                                       | -
+DB                  |    PostgreSQL    |       2                                             |           1 / 24                                                       | -
 
 * DB - Database 
 * CT - Container
 
 **PostgreSQL Database**: 9.5.2<br/>
-**Java Engine**: Java 7.0
 
 ### Deployment
 
