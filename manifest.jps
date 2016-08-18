@@ -5,7 +5,7 @@
 		"categories": ["apps/clustered-dbs", "apps/clusters"],
 		"type": "php",
 		"homepage": "http://docs.jelastic.com/postgresql-database-replication",
-		"logo": "https://raw.githubusercontent.com/bubbl/postgresql-replication/master/images/postgres9_logo.png",
+		"logo": "https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/images/postgres9_logo.png",
 		"description": {
 			"text": "Master-slave replication is used to solve performance problems, to support the db backups, and to alleviate system failures. It enables data from one database server (master) to be replicated to another (slave)"
 		},
@@ -36,7 +36,7 @@
 						"executeShellCommands": [{
 								"nodeMission": "sqldb",
 								"commands": [
-										"wget \"https://raw.githubusercontent.com/bubbl/postgresql-replication/master/scripts/execCmdScript.sh\" -O /var/lib/pgsql/script.sh 2>&1"
+										"wget \"https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/scripts/execCmdScript.sh\" -O /var/lib/pgsql/script.sh 2>&1"
 								]
 							}, {
 								"nodeId": "${nodes.sqldb[0].id}",
