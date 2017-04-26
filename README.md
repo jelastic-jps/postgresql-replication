@@ -15,7 +15,7 @@ The target usage for replication in PostgreSQL databases includes:
   -  Analytics
   -  Long-distance data distribution
 
-###Environment Topology
+### Environment Topology
 
 ![MySQL Database Replication Topology](https://docs.google.com/drawings/d/1B4N1oR9ft5YrP6jPVApzHCYsTOD-u_3X1CAQD-b6rJk/pub?w=557&h=275)
 
