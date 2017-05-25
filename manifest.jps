@@ -12,7 +12,7 @@
     "logo": "https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/images/postgres-70x70.png",
     "description": { "text": "Out-of-box clustered PostgreSQL Replication solution with two database containers. Enables to improve your data availability by replicating it from primary (master) database server to the standby (slave) one in asynchronous mode.",
     "short": "Preconfigured PostgreSQL cluster for asynchronous master-slave data replication"},
-    "success": "Administrator credentials for the created database servers have been sent to your email.\nBefore accessing, please wait a minute for the required replication configurations to be applied. <br><br /> <table style='font-size:13px; border: none;'><tr><td>Master DB admin panel:</td><td style='padding-left: 10px;'><a href='${nodes.postgres9.url}' target='_blank'>${nodes.postgres9.url}/</a></td></tr></table>",
+    "success": "Admin credentials for created database servers have been sent to your email.\nBefore accessing, please wait a minute for the required replication configurations to be applied. <br><br /> <table style='font-size:13px; border: none;'><tr><td>Master admin panel URL:</td><td style='padding-left: 10px;'><a href='${nodes.postgres9.url}' target='_blank'>${nodes.postgres9.url}/</a></td></tr></table>",
     "name": "PostgreSQL Database Replication",
     "globals": {
       "password": "${fn.password}"
