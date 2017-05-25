@@ -1,41 +1,32 @@
-[![PostgreSQL Database Replication](images/postgres9_logo.png)](../../../postgresql-replication)
-## PostgreSQL Database Replication
+# PostgreSQL Database Replication
 
-The JPS package deploys PostgreSQL Cluster with preconfigured replication that initially contains 2 database containers. The package provides the solution for solving performance problems, DB backups support, gives ability to alleviate system failures. It enables data from one database server (the master) to be replicated to another standby (the slave).
+Basic ready-to-use PostgreSQL cluster, which implements asynchronous master-slave data replication within a pair of preconfigured database containers.
 
-### Highlights
-This package is designed to solve a number of different problems with performance, supporting the backup of different databases, and as a part of a larger solution to alleviate system failures.<br />
+## Package Implementation Specifics
 
-Get advantages of PostgreSQL database clustering and high availability by setting up the hot standby (or streaming) replication, i.e. asynchronous binary replication to one or more standbys, queried as a read-only databases.<br />
-Using WAL (Write-Ahead Logging) data is the fastest available way of replication with a great performance, so-called asynchronous replication. In this case the master database server works in archiving mode just writing the data to the storage.<br />
-While the standby database cluster operates in recovery mode, reading the master's WAL files. These files are transferred to the standby DB promptly after writing is completed. In such a way, if master server totally fails, the WAL content streams to the standby cluster with just a few seconds delay.<br />
+The presented PostgreSQL Replication solution is built upon Jelastic certified stack template for **PostgreSQL 9.5.5**. It operates two database containers (master and slave, one per role) and makes data from primary DB server to be asynchronously replicated to a standby one.
 
-The target usage for replication in PostgreSQL databases includes:
-  -  Data security
-  -  Analytics
-  -  Long-distance data distribution
+![postgresql-replication-topology](images/postgresql-replication-topology.png)
 
-### Environment Topology
+Within the package, each database container receives the [vertical scaling](https://docs.jelastic.com/automatic-vertical-scaling) up to **24 dynamic cloudlets** (or 3 GiB of RAM and 9.6 GHz of CPU) that are provided dynamically based on the incoming load. Subsequently, you can change the resource allocation limit by following the above-linked guide.
 
-![MySQL Database Replication Topology](https://docs.google.com/drawings/d/1B4N1oR9ft5YrP6jPVApzHCYsTOD-u_3X1CAQD-b6rJk/pub?w=557&h=275)
 
-### Specifics
+## How to Install PostgreSQL Database Replication Package
 
-Layer              |     Server    | Number of CTs <br/> by default | Cloudlets per CT <br/> (reserved/dynamic) | Options
------------------ | --------------| :-----------------------------------------: | :-------------------------------------------------------: | :-----:
-DB                  |    PostgreSQL    |       2                                             |           1 / 24                                                       | -
+In order to get PostgreSQL Database Replication solution instantly deployed, click the **Deploy to Jelastic** button below and specify your email address within the opened widget. Then choose one of the [Jelastic Public Cloud](https://jelastic.cloud) providers (in case you don’t have an account at the appropriate platform, it will be created automatically) and press **Install**.
 
-* DB - Database 
-* CT - Container
+[![Deploy](images/deploy-to-jelastic.png)](https://jelastic.com/install-application/?manifest=https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/manifest.jps)
 
-**PostgreSQL Database**: 9.5.2<br/>
+To install the package manually, log in to the Jelastic dashboard with your credentials and [import](https://docs.jelastic.com/environment-import) link to the [**_manifest.jps_**](https://github.com/jelastic-jps/postgresql-replication/blob/master/manifest.jps) file (alternatively, you can locate this package via [Jelastic Marketplace](https://docs.jelastic.com/marketplace), *Clusters* section)
 
-### Deployment
+![postgresql-replication-installation](images/postgresql-replication-installation.png)
 
-In order to get this solution instantly deployed, click the "Get It Hosted Now" button, specify your email address within the widget, choose one of the [Jelastic Public Cloud providers](https://jelastic.cloud) and press Install.
+Within the opened installation window, type *Environment* name and optional *Display Name* ([environment alias](https://docs.jelastic.com/environment-aliases)). Also, select the preferable [*Region*](https://docs.jelastic.com/environment-regions) (if several ones are available) and click **Install**.
 
-[![GET IT HOSTED](https://raw.githubusercontent.com/jelastic-jps/jpswiki/master/images/getithosted.png)](https://jelastic.com/install-application/?manifest=https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/manifest.jps)
+Wait a few minutes for Jelastic to prepare your environment and set up the required replication configurations. When finished, you’ll be shown the appropriate notification with data for PostgreSQL administration interface access. 
 
-To deploy this package to Jelastic Private Cloud, import [this JPS manifest](../../raw/master/manifest.jps) within your dashboard ([detailed instruction](https://docs.jelastic.com/environment-export-import#import)).
+![postgresql-replication-success-message](images/postgresql-replication-success-message.png)
 
-More information about Jelastic JPS package and about installation widget for your website can be found in the [Jelastic JPS Application Package](https://github.com/jelastic-jps/jpswiki/wiki/Jelastic-JPS-Application-Package) reference.
+This information will be also duplicated to you via email.
+
+To find more details on PostgreSQL Replication package installation and use, refer to the [article](http://blog.jelastic.com/2017/05/25/master-slave-postgresql-replication-automatic-installation/).
