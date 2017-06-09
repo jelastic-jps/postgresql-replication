@@ -1,7 +1,7 @@
 import com.hivext.api.environment.Environment;
 
 var APPID = hivext.local.getParam("TARGET_APPID"),
-    sNewPassword = '${globals.password}',
+    sNewPassword = '${user.appPassword}',
     nNodesLength,
     oEnvNodes,
     oResp,
