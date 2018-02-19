@@ -22,7 +22,7 @@
         "engine": "java7",
         "nodes": [
           {
-            "cloudlets": 24,
+            "cloudlets": 8,
             "count": 2,
             "nodeType": "postgres9"
           }
