@@ -8,6 +8,7 @@
       "apps/clusters"
     ],
     "type": "php",
+    "startPage": "${nodes.sqldb.url}",
     "homepage": "http://docs.jelastic.com/postgresql-database-replication",
     "logo": "https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master/images/postgres-70x70.png",
     "description": { "text": "Out-of-box clustered PostgreSQL Replication solution with two database containers. Enables to improve your data availability by replicating it from primary (master) database server to the standby (slave) one in asynchronous mode.",
