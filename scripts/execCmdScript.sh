@@ -7,7 +7,7 @@ PGSQL_DATA="/var/lib/pgsql/data/"
 
 if [ "${1}" == "master" ]; then
     #set up master
-    PGPASSWORD=${DB_PASSWORD} psql -Uwebadmin postgres -c "CREATE USER replication REPLICATION LOGIN CONNECTION LIMIT 1 ENCRYPTED PASSWORD '${DB_PASSWORD}';";
+    PGPASSWORD=${DB_PASSWORD} psql -Uwebadmin postgres -c "CREATE USER replication REPLICATION LOGIN CONNECTION LIMIT -1 ENCRYPTED PASSWORD '${DB_PASSWORD}';";
     sudo /etc/init.d/postgresql stop
     sed -i "1i host replication  replication       ${SLAVE_IP}/32    trust" ${PGSQL_DATA}pg_hba.conf;
     sed -i "s|.*wal_level.*|wal_level = hot_standby|g" ${PGSQL_DATA}postgresql.conf;
