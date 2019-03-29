@@ -1,31 +1,34 @@
 type: install
 version: '0.8'
 id: postgresqlreplic
+
 categories:
 - apps/clustered-dbs
 - apps/clusters
 baseUrl: https://raw.githubusercontent.com/jelastic-jps/postgresql-replication/master
 startPage: ${nodes.sqldb[0].url}
+
 homepage: http://docs.jelastic.com/postgresql-database-replication
 logo: "/images/postgres-70x70.png"
-description:
-  text: Out-of-box clustered PostgreSQL Replication solution with two database containers.
-    Enables to improve your data availability by replicating it from primary (master)
-    database server to the standby (slave) one in asynchronous mode.
+description: |-
+  Out-of-box clustered PostgreSQL Replication solution with two database containers.
+  Enables to improve your data availability by replicating it from primary (master)
+  database server to the standby (slave) one in asynchronous mode.
   short: Preconfigured PostgreSQL cluster for asynchronous master-slave data replication
-success: |-
-  Admin credentials for created database servers have been sent to your email.
-  Before accessing, please wait a minute for the required replication configurations to be applied. <br><br /> <table style='font-size:13px; border: none;'><tr><td>Master admin panel URL:</td><td style='padding-left: 10px;'><a href='${nodes.postgres9.url}' target='_blank'>${nodes.postgres9.url}/</a></td></tr></table>
 name: PostgreSQL Database Replication
 engine: java7
+
 nodes:
   cloudlets: 8
   count: 2
   nodeType: postgres9
+
 onBeforeResetNodePassword[nodeGroup:sqldb]:
   - resetingNodePassword
   - stopEvent
+
 onInstall: ConfigReplication
+
 actions:
   resetingNodePassword:
     script: /scripts/resetNodePassword.js
@@ -35,3 +38,12 @@ actions:
       ${nodes.sqldb.password} ${nodes.sqldb[0].address} 1>> /var/lib/pgsql/log.log 2>>/var/lib/pgsql/log.log
   - cmd [${nodes.sqldb[1].id}]: bash -x /var/lib/pgsql/script.sh slave ${nodes.sqldb[1].address}
       ${nodes.sqldb.password} ${nodes.sqldb[0].address} 1>> /var/lib/pgsql/log.log 2>>/var/lib/pgsql/log.log
+
+success: |-
+  Admin credentials for created database servers have been sent to your email.
+  Before accessing, please wait a minute for the required replication configurations to be applied. <br><br />
+  <table style='font-size:13px; border: none;'>
+  <tr><td>Master admin panel URL:</td><td style='padding-left: 10px;'><a href='${nodes.postgres9.url}' target='_blank'>${nodes.postgres9.url}/</a></td></tr>
+  <tr><td>Admin name:</td><td style='padding-left: 10px;'>webadmin</td></tr>
+  <tr><td>Password:</td><td style='padding-left: 10px;'>${nodes.postgres9.password}</td></tr>
+  </table>
