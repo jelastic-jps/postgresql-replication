@@ -15,7 +15,7 @@ description: |-
   Enables to improve your data availability by replicating it from primary (master)
   database server to the standby (slave) one in asynchronous mode.
   short: Preconfigured PostgreSQL cluster for asynchronous master-slave data replication
-name: PostgreSQL Database Replication
+name: PostgreSQL Cluster
 engine: java7
 
 nodes:
