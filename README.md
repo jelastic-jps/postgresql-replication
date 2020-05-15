@@ -1,3 +1,6 @@
+# Deprecated. Please refer to [the new repo](https://github.com/jelastic-jps/postgres/).
+
+
 # PostgreSQL Database Replication
 
 Basic ready-to-use PostgreSQL cluster, which implements asynchronous master-slave data replication within a pair of preconfigured database containers.
