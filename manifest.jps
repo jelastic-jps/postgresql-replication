@@ -20,8 +20,6 @@ settings:
     name: nodeType
     type: list    
     values: 
-      postgres9: PostgreSQL 9
-      postgres10: PostgreSQL 10
       postgres11: PostgreSQL 11
       #postgres12: PostgreSQL 12
     default: postgres11
